@@ -1,0 +1,13 @@
+Package: mocktwitter
+Version: 0.0.0.9000
+Title: What the Package Does (One Line, Title Case)
+Description: What the package does (one paragraph).
+Authors@R: person("First", "Last", , "first.last@example.com", c("aut", "cre"))
+License: What license it uses
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
+author: person("Michael Wayne", "Kearney", ,
+    "kearneymw@missouri.edu", role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0002-0730-4694"))
+license: MIT
