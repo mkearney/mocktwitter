@@ -8,3 +8,5 @@ use_readme_rmd()
 use_git()
 use_git_ignore()
 
+rmarkdown::render("README.Rmd")
+unlink("README.html")

@@ -25,7 +25,7 @@ req_vars <- function() {
 #' @param file File name to save as. Defaults to temporary file.
 #' @return Saves an html file
 #' @export
-mocktwit <- function(x, file = NULL) {
+mocktwitter <- function(x, file = NULL) {
   stopifnot(is.data.frame(x), nrow(x) > 0)
   if (any(!req_vars() %in% names(x))) {
     missing <- req_vars()[!req_vars() %in% names(x)]

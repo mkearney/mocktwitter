@@ -27,7 +27,7 @@ rdt <- rtweet::lookup_statuses("1010900865602019329")
 rdt$text <- "Give me your tired, your poor, your huddled masses yearning to breathe free, the wretched refuse of your teeming shore. Send these, the homeless, tempest-tossed to me, I lift my lamp beside the golden door!"
 
 ## mockup an HTML twitter page
-mocktwit(rdt)
+mocktwitter(rdt)
 ```
 
 <p align="center">
