@@ -8,7 +8,7 @@ li_favuser <- function(x) {
 }
 
 li_favusers <- function(x) {
-  paste(map(seq_len(nrow(x)), ~ li_favuser(x[.x, ])), collapse = "\n\n")
+  paste(lapply(seq_len(nrow(x)), function(.x) li_favuser(x[.x, ])), collapse = "\n\n")
 }
 
 req_vars <- function() {
@@ -68,6 +68,7 @@ mocktwit <- function(x, file = NULL) {
   } else {
     fav_users <- NULL
   }
+  y <- template
   y <- gsub("\\{status_text\\}", x$text, y)
   y <- gsub("\\{screen_name\\}", x$screen_name, y)
   y <- gsub("\\{user_id\\}", x$user_id, y)
