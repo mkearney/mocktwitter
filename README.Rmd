@@ -28,24 +28,24 @@ devtools::install_github("mkearney/mocktwitter")
 
 ## Example
 
-Pass along a Twitter status data frame returned by [rtweet](http://rtweet.info).
+Three different ways to create a [mock Twitter status HTML page](tools/readme/ex.html):
 
 ```{r}
-## twitter status data for a realDonaldTrump tweet
+## (1) URL to twitter status data byrealDonaldTrump
+mocktwitter("https://twitter.com/realDonaldTrump/status/1010900865602019329")
+
+## (2) mockup an HTML twitter page for a readDonaldTrump status
+mocktwitter("1010900865602019329")
+
+## (3) twitter status data from rtweet for a realDonaldTrump tweet
 rdt <- rtweet::lookup_statuses("1010900865602019329")
 
 ## override with custom text
 rdt$text <- "Give me your tired, your poor, your huddled masses yearning to breathe free, the wretched refuse of your teeming shore. Send these, the homeless, tempest-tossed to me, I lift my lamp beside the golden door!"
 
 ## mockup an HTML twitter page
-mocktwitter(rdt)
+mocktwitter(rdt, file = "tools/readme/ex.html")
 ```
 
 <p align="center"><img src="tools/readme/ex.png" > </p>
 
-Or simply specify the unique `status_id`
-
-```{r}
-## mockup an HTML twitter page for a readDonaldTrump status
-mocktwitter("1010900865602019329")
-```

@@ -122,8 +122,18 @@ mocktwitter.data.frame <- function(x, file = NULL) {
   }
   if (is.null(file)) {
     file <- tempfile(fileext = ".html")
+    message("Saving as ", file)
+    writeLines(y, file)
+    file.copy(file, tmp)
+  } else {
+    tmp <- tempfile(fileext = ".html")
+    message("Saving as ", file)
+    writeLines(y, file)
+    file.copy(file, tmp)
   }
-  message("Saving as ", file)
-  writeLines(y, file)
-  browseURL(file)
+  if (rstudioapi::isAvailable()) {
+    rstudioapi::viewer(tmp)
+  } else {
+    browseURL(file)
+  }
 }
