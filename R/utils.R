@@ -1,3 +1,10 @@
+read_source <- function(x) {
+  x <- httr::GET(x)
+  httr::warn_for_status(x)
+  httr::content(x, as = "text", encoding = "UTF-8")
+}
+
+
 is_id <- function(x) {
   x <- gsub("\\s|/", "", x)
   nchar(gsub("\\d", "", x)) == 0
@@ -35,3 +42,4 @@ is_status_id <- function(x) {
     warning = function(w) return(NULL))
   is.data.frame(x) && nrow(x) == 1L
 }
+

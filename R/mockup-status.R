@@ -1,22 +1,4 @@
 
-
-li_favuser <- function(x) {
-  sprintf('<a class="js-profile-popup-actionable js-tooltip" href="/%s" data-user-id="%s" original-title="%s" title="%s" rel="noopener">
-  <img class="avatar size24 js-user-profile-link" src="%s" alt="%s">
-</a>', x$user_id, x$screen_name, x$user_id, x$name,
-  x$profile_image_url, x$name)
-}
-
-li_favusers <- function(x) {
-  paste(lapply(seq_len(nrow(x)), function(.x) li_favuser(x[.x, ])), collapse = "\n\n")
-}
-
-req_vars <- function() {
-  c("retweet_count", "favorite_count", "status_id", "user_id", "screen_name",
-    "profile_image_url", "profile_url", "profile_banner_url", "created_at", "text",
-    "name", "description", "location")
-}
-
 #' Create a mockup of a Twitter status
 #'
 #' Generates HTML twitter status page.
@@ -24,21 +6,36 @@ req_vars <- function() {
 #' @param x Twitter status data frame (as returned by rtweet).
 #' @param file File name to save as. Defaults to temporary file.
 #' @return Saves an html file
+#' @examples
+#' \dontrun{
+#' ## create mock-up of Twitter status about rtweet release using
+#'
+#' ## the status URL
+#' mocktwitter_status("https://twitter.com/kearneymw/status/1009431823791902720")
+#'
+#' ## the status_id
+#' mocktwitter_status("1009431823791902720")
+#'
+#' ## or pick a tweet from my timeline to display
+#' kmw <- rtweet::get_timeline("kearneymw")
+#' mocktwitter_status(kmw[1, ])
+#'
+#' }
 #' @export
-mocktwitter <- function(x, file = NULL) UseMethod("mocktwitter")
+mocktwitter_status <- function(x, file = NULL) UseMethod("mocktwitter_status")
 
-mocktwitter.default <- function(x, file = NULL) {
+mocktwitter_status.default <- function(x, file = NULL) {
   stop("must supply status_id or a twitter status data frame returned by an rtweet function")
 }
 
 #' @export
-mocktwitter.factor <- function(x, file = NULL) {
+mocktwitter_status.factor <- function(x, file = NULL) {
   x <- as.character(x)
-  mocktwitter(x, file)
+  mocktwitter_status(x, file)
 }
 
 #' @export
-mocktwitter.character <- function(x, file = NULL) {
+mocktwitter_status.character <- function(x, file = NULL) {
   stopifnot(length(x) == 1L)
   if (!is_token_configured()) {
     stop("please setup your Twitter API token, see: ",
@@ -51,13 +48,12 @@ mocktwitter.character <- function(x, file = NULL) {
       "", x)
   }
   x <- rtweet::lookup_statuses(x)
-  x <- as.data.frame(x)
-  mocktwitter(x, file)
+  mocktwitter_status(x, file)
 }
 
 
 #' @export
-mocktwitter.data.frame <- function(x, file = NULL) {
+mocktwitter_status.data.frame <- function(x, file = NULL) {
   if (any(!req_vars() %in% names(x))) {
     missing <- req_vars()[!req_vars() %in% names(x)]
     stop(paste("Missing the following variables:", paste(missing, collapse = ", ")))
@@ -73,8 +69,7 @@ mocktwitter.data.frame <- function(x, file = NULL) {
     x$favorite_count <- prettyNum(x$favorite_count, big.mark = ",")
   }
   if (x$favorite_count > 0) {
-    favs <- httr::GET(sprintf("https://twitter.com/%s/status/%s", x$screen_name, x$status_id))
-    favs <- httr::content(favs, as = "text", encoding = "UTF-8")
+    favs <- read_source(sprintf("https://twitter.com/%s/status/%s", x$screen_name, x$status_id))
     m <- gregexpr("(?<=data-user-id=.{1})\\d+(?=.{1} original-title)", favs, perl = TRUE)
     if (length(m[[1]]) > 0) {
       favs <- unique(regmatches(favs, m)[[1]])
@@ -136,4 +131,21 @@ mocktwitter.data.frame <- function(x, file = NULL) {
   } else {
     browseURL(file)
   }
+}
+
+li_favuser <- function(x) {
+  sprintf('<a class="js-profile-popup-actionable js-tooltip" href="/%s" data-user-id="%s" original-title="%s" title="%s" rel="noopener">
+  <img class="avatar size24 js-user-profile-link" src="%s" alt="%s">
+</a>', x$user_id, x$screen_name, x$user_id, x$name,
+    x$profile_image_url, x$name)
+}
+
+li_favusers <- function(x) {
+  paste(lapply(seq_len(nrow(x)), function(.x) li_favuser(x[.x, ])), collapse = "\n\n")
+}
+
+req_vars <- function() {
+  c("retweet_count", "favorite_count", "status_id", "user_id", "screen_name",
+    "profile_image_url", "profile_url", "profile_banner_url", "created_at", "text",
+    "name", "description", "location")
 }
