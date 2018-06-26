@@ -53,25 +53,30 @@ In Rstudio, a preview will be displayed in the viewer pane.
 
 </p>
 
-## `mocktwitter_timeline()` (coming soon)
+## `mocktwitter_timeline()` (co**dev in progress**
 
 Use `mocktwitter_timeline()` with a user URL, screen name, user ID, or
 timeline data returned by [**{rtweet}**](http://rtweet.info) to create a
 [mock-up of a Twitter status HTML
 page](https://htmlpreview.github.io/?https://github.com/mkearney/mocktwitter/blob/master/tools/readme/ex.html):
 
-**Not currently available (development in progress)**
-
-``` r
-## (1) URL to a twitter timeline
-mocktwitter_timeline("https://twitter.com/kearneymw")
+\*\*\`{r} \#\# (1) URL to a twitter timeline
+mocktwitter\_timeline(“<https://twitter.com/kearneymw>”)
 
 ## (2) screen name or user ID of twitter account
-mocktwitter_timeline("kearneymw")
+
+mocktwitter\_timeline(“kearneymw”)
 
 ## (3) timeline data from rtweet
-kmw <- rtweet::get_timeline("kearneymw")
+
+kmw \<- rtweet::get\_timeline(“kearneymw”)
 
 ## mock-up of an HTML twitter timeline page
-mocktwitter_timeline(kmw, file = "tools/readme/ex.html")
-```
+
+mocktwitter\_timeline(kmw, file = “tools/readme/ex.html”) \`\`\`
+
+<p align="center">
+
+<img src="tools/readme/ex3.png" >
+
+</p>

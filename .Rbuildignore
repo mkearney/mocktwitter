@@ -2,3 +2,4 @@
 ^LICENSE\.md$
 ^mocktwitter\.Rproj$
 ^\.Rproj\.user$
+\.DS_Store$

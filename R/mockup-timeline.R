@@ -35,7 +35,6 @@ mocktwitter_timeline.factor <- function(x, file = NULL) {
 
 #' @export
 mocktwitter_timeline.character <- function(x, file = NULL) {
-  stop("this isn't ready yet")
   stopifnot(length(x) == 1L)
   if (!is_token_configured()) {
     stop("please setup your Twitter API token, see: ",
@@ -47,53 +46,18 @@ mocktwitter_timeline.character <- function(x, file = NULL) {
       "https://[[:graph:]]{0,30}twitter\\.com/|/$",
       "", x)
   }
-  x <- rtweet::get_timeline(x)
-  mocktwitter_status(x, file)
+  mocktwitter_mytimeline(x, file)
 }
 
 
-#' @export
-mocktwitter_status.data.frame <- function(x, file = NULL) {
-  stop("this isn't ready yet")
-  if (any(!req_vars() %in% names(x))) {
-    missing <- req_vars()[!req_vars() %in% names(x)]
-    stop(paste("Missing the following variables:", paste(missing, collapse = ", ")))
-  }
-  if (length(unique(x$user_id)) > 1L) {
-    warning("Can only create one timeline at a time. Using the first user...")
-    x <- x[x$user_id == x$user_id[1], ]
-  }
-  x$retweet_count <- ifelse(x$retweet_count >= 1000,
-    prettyNum(x$retweet_count, big.mark = ","),
-    x$retweet_count)
-  x$favorite_count <- ifelse(x$favorite_count >= 1000,
-    prettyNum(x$favorite_count, big.mark = ","),
-    x$favorite_count)
-  if (is.null(file)) {
-    file <- tempfile(fileext = ".html")
-    message("Saving as ", file)
-    writeLines(y, file)
-    file.copy(file, tmp)
-  } else {
-    tmp <- tempfile(fileext = ".html")
-    message("Saving as ", file)
-    writeLines(y, file)
-    file.copy(file, tmp)
-  }
-  if (rstudioapi::isAvailable()) {
-    rstudioapi::viewer(tmp)
-  } else {
-    browseURL(file)
-  }
-}
-
-mocktwitter_mytimeline <- function() {
-  sn <- rtweet:::authenticating_user_name()
-  tml <- read_source(sprintf("https://twitter.com/%s", sn))
+mocktwitter_mytimeline <- function(user, file) {
+  tml <- read_source(sprintf("https://twitter.com/%s", user))
   tml <- sub(".{0,97}signin-l.{0,148}", "", tml)
   tml <- sub(
     ".{0,112}SignupCallOut.*personalized timeline.*signup_callout.{0,60}",
     "", tml)
+  tml <- sub(".{0,12}nav secondary-nav session-dropdown.*page-outer",
+    "</div>\n</div>\n</div>\n</div>\n</div>\n<div id=\"page-outer", tml)
   css <- "
   body { font-size: 12px !important; line-height: 14px !important; }
   .u-size1of3 { width: 200px !important; }
@@ -102,7 +66,17 @@ mocktwitter_mytimeline <- function() {
   </style>"
   tml <- sub("</style>", css, tml)
   tmp <- tempfile(fileext = ".html")
-  writeLines(tml, tmp)
-  rstudioapi::viewer(tmp)
-  invisible(tmp)
+  if (is.null(file)) {
+    file <- tmp
+  }
+  writeLines(tml, file)
+  message("Saving as ", file)
+  file.copy(file, tmp)
+  if (rstudioapi::isAvailable()) {
+    rstudioapi::viewer(tmp)
+  } else if (!exists(".mocktwitter_opened")) {
+    assign(".mocktwitter_opened", new.env(), envir = .GlobalEnv)
+    browseURL(file)
+  }
+  invisible(file)
 }
