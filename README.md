@@ -19,8 +19,7 @@ devtools::install_github("mkearney/mocktwitter")
 
 Use `mocktwitter_status()` with a status URL, status ID, or tweets data
 returned by [**{rtweet}**](http://rtweet.info) to create a [mock-up of a
-Twitter status HTML
-page](https://htmlpreview.github.io/?https://github.com/mkearney/mocktwitter/blob/master/tools/readme/ex.html):
+Twitter status HTML page](htols/readme/ex.html):
 
 ``` r
 ## (1) URL to twitter status data byrealDonaldTrump
@@ -57,21 +56,14 @@ In Rstudio, a preview will be displayed in the viewer pane.
 
 Use `mocktwitter_timeline()` with a user URL, screen name, user ID, or
 timeline data returned by [**{rtweet}**](http://rtweet.info) to create a
-[mock-up of a Twitter status HTML
-page](https://htmlpreview.github.io/?https://github.com/mkearney/mocktwitter/blob/master/tools/readme/ex.html):
+[mock-up of a Twitter status HTML page](tools/readme/ex2.html):
 
 ``` r
 ## (1) URL to a twitter timeline
 mocktwitter_timeline("https://twitter.com/kearneymw")
 
 ## (2) screen name or user ID of twitter account
-mocktwitter_timeline("kearneymw")
-
-## (3) timeline data from rtweet
-kmw <- rtweet::get_timeline("kearneymw")
-
-## mock-up of an HTML twitter timeline page
-mocktwitter_timeline(kmw, file = "tools/readme/ex.html")
+mocktwitter_timeline("kearneymw", file = "tools/readme/ex2.html")
 ```
 
 <p align="center">
