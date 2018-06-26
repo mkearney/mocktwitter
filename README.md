@@ -18,7 +18,7 @@ devtools::install_github("mkearney/mocktwitter")
 ## Example
 
 Three different ways to create a [mock Twitter status HTML
-page](tools/readme/ex.html):
+page](https://htmlpreview.github.io/?https://github.com/mkearney/mocktwitter/blob/master/tools/readme/ex.html):
 
 ``` r
 ## (1) URL to twitter status data byrealDonaldTrump
