@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 # mocktwitter
 
-Generate HTML pages for Twitter statuses.
+🐧🐦 Generate HTML pages for Twitter statuses.
 
 ## Installation
 
@@ -43,9 +43,12 @@ rdt <- rtweet::lookup_statuses("1010900865602019329")
 ## override with custom text
 rdt$text <- "Give me your tired, your poor, your huddled masses yearning to breathe free, the wretched refuse of your teeming shore. Send these, the homeless, tempest-tossed to me, I lift my lamp beside the golden door!"
 
-## mockup an HTML twitter page
+## mock-up an HTML twitter page
 mocktwitter(rdt, file = "tools/readme/ex.html")
 ```
 
 <p align="center"><img src="tools/readme/ex.png" > </p>
 
+In Rstudio, a preview will be displayed in the viewer pane.
+
+<p align="center"><img src="tools/readme/ex2.png" > </p>
