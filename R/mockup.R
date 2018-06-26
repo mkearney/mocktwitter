@@ -25,8 +25,39 @@ req_vars <- function() {
 #' @param file File name to save as. Defaults to temporary file.
 #' @return Saves an html file
 #' @export
-mocktwitter <- function(x, file = NULL) {
-  stopifnot(is.data.frame(x), nrow(x) > 0)
+mocktwitter <- function(x, file = NULL) UseMethod("mocktwitter")
+
+mocktwitter.default <- function(x, file = NULL) {
+  stop("must supply status_id or a twitter status data frame returned by an rtweet function")
+}
+
+#' @export
+mocktwitter.factor <- function(x, file = NULL) {
+  x <- as.character(x)
+  mocktwitter(x, file)
+}
+
+#' @export
+mocktwitter.character <- function(x, file = NULL) {
+  stopifnot(length(x) == 1L)
+  if (!is_token_configured()) {
+    stop("please setup your Twitter API token, see: ",
+      "http://rtweet.info/articles/auth.html or ",
+      "vignette(\"auth\", package = \"rtweet\") for more information")
+  }
+  if (grepl("^http", x)) {
+    x <- gsub(
+      "https://[[:graph:]]{0,30}twitter\\.com/[[:graph:]]+/status/|/$",
+      "", x)
+  }
+  x <- rtweet::lookup_statuses(x)
+  x <- as.data.frame(x)
+  mocktwitter(x, file)
+}
+
+
+#' @export
+mocktwitter.data.frame <- function(x, file = NULL) {
   if (any(!req_vars() %in% names(x))) {
     missing <- req_vars()[!req_vars() %in% names(x)]
     stop(paste("Missing the following variables:", paste(missing, collapse = ", ")))
@@ -92,6 +123,7 @@ mocktwitter <- function(x, file = NULL) {
   if (is.null(file)) {
     file <- tempfile(fileext = ".html")
   }
+  message("Saving as ", file)
   writeLines(y, file)
   browseURL(file)
 }

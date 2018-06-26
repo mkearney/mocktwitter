@@ -17,7 +17,8 @@ devtools::install_github("mkearney/mocktwitter")
 
 ## Example
 
-This is a basic example:
+Pass along a Twitter status data frame returned by
+[rtweet](http://rtweet.info).
 
 ``` r
 ## twitter status data for a realDonaldTrump tweet
@@ -35,3 +36,10 @@ mocktwitter(rdt)
 <img src="tools/readme/ex.png" >
 
 </p>
+
+Or simply specify the unique `status_id`
+
+``` r
+## mockup an HTML twitter page for a readDonaldTrump status
+mocktwitter("1010900865602019329")
+```
