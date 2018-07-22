@@ -21,10 +21,13 @@
 #'
 #' }
 #' @export
-mocktwitter_timeline <- function(x, file = NULL) UseMethod("mocktwitter_timeline")
+mocktwitter_timeline <- function(x, file = NULL) {
+  UseMethod("mocktwitter_timeline")
+}
 
 mocktwitter_timeline.default <- function(x, file = NULL) {
-  stop("must supply screen name, user id, or twitter timeline data frame returned by an rtweet function")
+  stop("must supply screen name, user id, or twitter timeline data frame ",
+    "returned by an rtweet function")
 }
 
 #' @export
